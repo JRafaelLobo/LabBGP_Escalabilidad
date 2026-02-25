@@ -15,10 +15,10 @@ Los dispositivos disponibles para el laboratorio son:
 ## 📡 Diagramas
 
 ### Diagrama IPv4
-![Diagrama IPV4](./imagenes/LAB_BGP_IPV4.png)
+![Diagrama IPV4](https://github.com/JRafaelLobo/LabBGP_Escalabilidad/blob/master/imagenes/LAB_BGP_IPv4.png?raw=true)
 
 ### Diagrama IPv6
-![Diagrama IPV6](./imagenes/LAB_BGP_IPV6.png)
+![Diagrama IPV6](https://github.com/JRafaelLobo/LabBGP_Escalabilidad/blob/master/imagenes/LAB_BGP_IPv6.png?raw=true)
 
 ## 📁 Estructura del Proyecto
 
