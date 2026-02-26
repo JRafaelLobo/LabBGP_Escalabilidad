@@ -20,6 +20,17 @@ Los dispositivos disponibles para el laboratorio son:
 ### Diagrama IPv6
 ![Diagrama IPV6](https://github.com/JRafaelLobo/LabBGP_Escalabilidad/blob/master/imagenes/LAB_BGP_IPv6.png?raw=true)
 
+
+## Limitaciones
+Debido a las restricciones físicas de nuestros dispositivos —principalmente el número reducido de interfaces disponibles en los routers— se empleará un switch con VLANs para simular enlaces punto a punto.
+Cada VLAN representará un “cable” independiente del diagrama original, permitiendo replicar la topología física sin necesidad de múltiples puertos por router.
+De esta forma, el switch funciona únicamente como medio de transporte para las VLANs definidas, mientras que la lógica de capa 3 se mantiene igual que en la topología física original. 
+
+### Diagrama IPV4
+![Diagrama IPV4](./imagenes/DiagramaPersonalizadoIPV4.drawio.svg)
+### Diagrama IPV6
+![Diagrama IPV6](./imagenes/DiagramaPersonalizadoIPV6.drawio.svg)
+
 ## 📁 Estructura del Proyecto
 
 ```
