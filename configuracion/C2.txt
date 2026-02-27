@@ -1,5 +1,14 @@
 hostname C2
 ipv6 unicast-routing
+username admin privilege 15 secret admin
+
+line con 0
+login local
+
+line vty 0 15
+login local
+
+banner motd #Solo a Personal Autorizado#
 !
 interface Loopback0
  ip address 20.0.0.242 255.255.255.255

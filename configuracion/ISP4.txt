@@ -2,7 +2,16 @@
 hostname ISP4
 no ip domain-lookup
 ipv6 unicast-routing
+username admin privilege 15 secret admin
 
+line con 0
+login local
+
+line vty 0 15
+login local
+
+banner motd #Solo a Personal Autorizado#
+!
 ! ---------- LOOPBACK ----------
 interface Loopback0
  ip address 80.0.0.100 255.255.255.255

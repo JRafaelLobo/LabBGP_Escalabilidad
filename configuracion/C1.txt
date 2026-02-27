@@ -1,9 +1,18 @@
 hostname C1
 ipv6 unicast-routing
+username admin privilege 15 secret admin
+
+line con 0
+login local
+
+line vty 0 15
+login local
+
+banner motd #Solo a Personal Autorizado#
 !
 interface Loopback0
  ip address 20.0.0.241 255.255.255.255
- ipv6 address Lo0 2001:DB8:250:1000::C1/128
+ ipv6 address 2001:DB8:250:1000::C1/128
  ipv6 enable
 !
 interface FastEthernet 0/0

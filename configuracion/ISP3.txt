@@ -1,5 +1,14 @@
 hostname ISP3
 ipv6 unicast-routing
+username admin privilege 15 secret admin
+
+line con 0
+login local
+
+line vty 0 15
+login local
+
+banner motd #Solo a Personal Autorizado#
 !
 interface Lo0
  ip address 70.0.0.100 255.255.255.255
