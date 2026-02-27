@@ -31,7 +31,7 @@ router ospf 1
 router bgp 250
  bgp router-id 20.0.0.231
  network 20.0.0.0 mask 255.255.240.0
- network 20.0.0.231 255.255.255.255 area 0
+ network 20.0.0.231 mask 255.255.255.255
  network 172.16.0.0 mask 255.255.248.0
  bgp log-neighbor-changes
 
