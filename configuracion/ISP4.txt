@@ -1,0 +1,43 @@
+! ---------- CONFIGURACIÓN INICIAL ----------
+hostname ISP4
+no ip domain-lookup
+
+! ---------- LOOPBACK ----------
+interface Loopback0
+ ip address 80.0.0.100 255.255.255.255
+ description ID del router ISP4
+
+interface FastEthernet 0/0
+ no shutdown
+ 
+! ---------- ENLACE HACIA ISP3 ----------
+interface FastEthernet 0/0.1
+ encapsulation Dot1Q 1
+ ip address 70.0.0.1 255.255.255.252
+ description ISP3 ↔ ISP4
+
+! ---------- ENLACE HACIA ISP1 ----------
+interface FastEthernet 0/0.2
+ encapsulation Dot1Q 2
+ ip address 50.0.0.9 255.255.255.252
+ description ISP1 ↔ ISP4
+
+! ---------- ROUTING BGP ----------
+router bgp 104
+ bgp log-neighbor-changes
+ bgp router-id 80.0.0.100
+
+ ! Publicamos nuestra red
+ network 80.0.0.0 mask 255.255.240.0
+
+ ! ---------- PEER CON ISP3 ----------
+ neighbor 70.0.0.2 remote-as 103
+ neighbor 70.0.0.2 description BGP con ISP3
+
+ ! ---------- PEER CON ISP1 ----------
+ neighbor 50.0.0.10 remote-as 101
+ neighbor 50.0.0.10 description BGP con ISP1
+
+! Opcional, recomendado:
+ ! Forzar que el ID del router esté anunciado en BGP
+ update-source Loopback0

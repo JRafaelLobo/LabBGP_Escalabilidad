@@ -1,0 +1,39 @@
+hostname ISP3
+!
+interface Lo0
+ ip address 70.0.0.100 255.255.255.255
+!
+
+interface FastEthernet 0/0
+ no shutdown
+interface FastEthernet 0/0.1
+ encapsulation Dot1Q 1
+ ip address 70.0.0.2 255.255.255.252
+ description ISP3 ↔ ISP4
+!
+interface FastEthernet 0/0.3
+ encapsulation Dot1Q 3
+ ip address 50.0.0.5 255.255.255.252
+ description ISP3 ↔ ISP1
+!
+interface FastEthernet 0/0.4
+ encapsulation Dot1Q 4
+ ip address 60.0.0.1 255.255.255.252
+ description ISP3 ↔ ISP2
+!
+router bgp 103
+ bgp router-id 70.0.0.100
+ network 70.0.0.0 mask 255.255.240.0
+
+ ! ISP4
+ neighbor 70.0.0.1 remote-as 104
+ neighbor 70.0.0.1 description BGP con ISP4
+
+ ! ISP1
+ neighbor 50.0.0.6 remote-as 101
+ neighbor 50.0.0.6 description BGP con ISP1
+
+
+ ! ISP2
+ neighbor 60.0.0.2 remote-as 102
+ neighbor 60.0.0.2 description BGP con ISP2

@@ -1,0 +1,75 @@
+! ---------- CONFIGURACIÓN INICIAL ----------
+hostname SW1
+no ip domain-lookup
+
+! ---------- CREACIÓN DE TODAS LAS VLAN ----------
+vlan 10
+ name ER1-C1
+vlan 11
+ name ER1-C2
+vlan 12
+ name ER2-C1
+vlan 13
+ name ER2-C2
+vlan 14
+ name C1-C2
+vlan 15
+ name C1-R2
+vlan 16
+ name C1-R1
+vlan 17
+ name C2-R1
+vlan 18
+ name C2-R2
+!
+
+! --- ER1 ---
+interface Ethernet0/0
+ switchport trunk encapsulation dot1Q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,11
+ description Trunk SW1 ↔ ER1
+
+! --- ER2 ---
+interface Ethernet0/1
+ switchport trunk encapsulation dot1Q
+ switchport mode trunk
+ switchport trunk allowed vlan 12,13
+ description Trunk SW1 ↔ ER2
+
+! --- C1 ---
+interface Ethernet0/2
+ switchport trunk encapsulation dot1Q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,12,14,15,16
+ description Trunk SW1 ↔ C1
+
+! --- C2 ---
+interface Ethernet0/3
+ switchport trunk encapsulation dot1Q
+ switchport mode trunk
+ switchport trunk allowed vlan 11,13,14,17,18
+ description Trunk SW1 ↔ C2
+
+! --- R1 ---
+interface Ethernet1/0
+ switchport trunk encapsulation dot1Q
+ switchport mode trunk
+ switchport trunk allowed vlan 16,17
+ description Trunk SW1 ↔ R1
+
+! --- R2 ---
+interface Ethernet1/1
+ switchport trunk encapsulation dot1Q
+ switchport mode trunk
+ switchport trunk allowed vlan 15,18
+ description Trunk SW1 ↔ R2
+
+
+ SW1
+├── E0/0 → ER1
+├── E0/1 → ER2
+├── E0/2 → C1
+├── E0/3 → C2
+├── E1/0 → R1
+└── E1/1 → R2

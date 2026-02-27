@@ -1,0 +1,64 @@
+hostname C1
+!
+interface Loopback0
+ ip address 20.0.0.241 255.255.255.255
+!
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 10.0.1.2 255.255.255.252
+ description C1 ↔ ER1
+!
+interface FastEthernet0/0.12
+ encapsulation dot1Q 12
+ ip address 10.0.1.6 255.255.255.252
+ description C1 ↔ ER2
+!
+interface FastEthernet0/0.14
+ encapsulation dot1Q 14
+ ip address 10.0.0.1 255.255.255.252
+ description C1 ↔ C2
+!
+interface FastEthernet0/0.15
+ encapsulation dot1Q 15
+ ip address 10.0.2.5 255.255.255.252
+ description C1 ↔ R2
+!
+interface FastEthernet0/0.16
+ encapsulation dot1Q 16
+ ip address 10.0.2.1 255.255.255.252
+ description C1 ↔ R1
+!
+router ospf 1
+ router-id 20.0.0.241
+ passive-interface Loopback0
+ network 20.0.0.241 0.0.0.0 area 0
+ network 10.0.1.0 0.0.0.3 area 0
+ network 10.0.1.4 0.0.0.3 area 0
+ network 10.0.0.0 0.0.0.3 area 0
+ network 10.0.2.4 0.0.0.3 area 0
+ network 10.0.2.0 0.0.0.3 area 0
+!
+router bgp 250
+ bgp router-id 20.0.0.241
+ network 20.0.0.0 mask 255.255.240.0
+ bgp log-neighbor-changes
+
+ ! iBGP con ER1
+ neighbor 20.0.0.252 remote-as 250
+ neighbor 20.0.0.252 update-source Loopback0
+
+ ! iBGP con ER2
+ neighbor 20.0.0.251 remote-as 250
+ neighbor 20.0.0.251 update-source Loopback0
+
+ ! iBGP con C2
+ neighbor 20.0.0.242 remote-as 250
+ neighbor 20.0.0.242 update-source Loopback0
+
+ ! iBGP con R1
+ neighbor 20.0.0.231 remote-as 250
+ neighbor 20.0.0.231 update-source Loopback0
+
+ ! iBGP con R2
+ neighbor 20.0.0.232 remote-as 250
+ neighbor 20.0.0.232 update-source Loopback0
