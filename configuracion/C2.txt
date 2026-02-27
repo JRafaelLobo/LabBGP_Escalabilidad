@@ -1,4 +1,5 @@
 hostname C2
+ipv6 unicast-routing
 !
 interface Loopback0
  ip address 20.0.0.242 255.255.255.255
@@ -11,35 +12,35 @@ interface FastEthernet 0/0
 interface FastEthernet0/0.13
  encapsulation dot1Q 13
  ip address 10.0.1.14 255.255.255.252
- description C2 ↔ ER2
+ description C2 --- ER2
  ipv6 address 2001:DB8:200:C003::2/64
  ipv6 enable
 !
 interface FastEthernet0/0.11
  encapsulation dot1Q 11
  ip address 10.0.1.10 255.255.255.252
- description C2 ↔ ER1
+ description C2 --- ER1
  ipv6 address 2001:DB8:200:C001::2/64
  ipv6 enable
 !
 interface FastEthernet0/0.14
  encapsulation dot1Q 14
  ip address 10.0.0.2 255.255.255.252
- description C2 ↔ C1
+ description C2 --- C1
  ipv6 address 2001:DB8:200:C004::2/64
  ipv6 enable
 !
 interface FastEthernet0/0.17
  encapsulation dot1Q 17
  ip address 10.0.2.9 255.255.255.252
- description C2 ↔ R1
+ description C2 --- R1
  ipv6 address 2001:DB8:200:C007::1/64
  ipv6 enable
 !
 interface FastEthernet0/0.18
  encapsulation dot1Q 18
  ip address 10.0.2.13 255.255.255.252
- description C2 ↔ R2
+ description C2 --- R2
  ipv6 address 2001:DB8:200:C008::1/64
  ipv6 enable
 !

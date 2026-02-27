@@ -1,6 +1,7 @@
 ! ---------- CONFIGURACIÓN INICIAL ----------
 hostname ISP4
 no ip domain-lookup
+ipv6 unicast-routing
 
 ! ---------- LOOPBACK ----------
 interface Loopback0
@@ -23,7 +24,7 @@ interface FastEthernet 0/0
 interface FastEthernet 0/0.1
  encapsulation Dot1Q 1
  ip address 70.0.0.1 255.255.255.252
- description ISP3 ↔ ISP4
+ description ISP3 --- ISP4
  ipv6 address 2001:DB8:103:C000::1/64
  ipv6 enable
 
@@ -31,7 +32,7 @@ interface FastEthernet 0/0.1
 interface FastEthernet 0/0.2
  encapsulation Dot1Q 2
  ip address 50.0.0.9 255.255.255.252
- description ISP1 ↔ ISP4
+ description ISP1 --- ISP4
  ipv6 address 2001:DB8:101:C002::1/64
  ipv6 enable
 
