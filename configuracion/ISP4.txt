@@ -27,8 +27,11 @@ router bgp 104
  bgp log-neighbor-changes
  bgp router-id 80.0.0.100
 
- ! Publicamos nuestra red
  network 80.0.0.0 mask 255.255.240.0
+
+ network 80.0.0.100 mask 255.255.255.255
+ network 70.0.0.0 mask 255.255.255.252
+ network 50.0.0.8 mask 255.255.255.252
 
  ! ---------- PEER CON ISP3 ----------
  neighbor 70.0.0.2 remote-as 103
@@ -37,7 +40,3 @@ router bgp 104
  ! ---------- PEER CON ISP1 ----------
  neighbor 50.0.0.10 remote-as 101
  neighbor 50.0.0.10 description BGP con ISP1
-
-! Opcional, recomendado:
- ! Forzar que el ID del router esté anunciado en BGP
- update-source Loopback0

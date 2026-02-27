@@ -25,6 +25,11 @@ router bgp 103
  bgp router-id 70.0.0.100
  network 70.0.0.0 mask 255.255.240.0
 
+ network 70.0.0.100 mask 255.255.255.255
+ network 70.0.0.0 mask 255.255.255.252
+ network 50.0.0.4 mask 255.255.255.252
+ network 60.0.0.0 mask 255.255.255.252
+
  ! ISP4
  neighbor 70.0.0.1 remote-as 104
  neighbor 70.0.0.1 description BGP con ISP4

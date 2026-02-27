@@ -44,7 +44,7 @@ router ospf 1
 router bgp 250
  bgp router-id 20.0.0.242
  network 20.0.0.0 mask 255.255.240.0
- bgp log-neighbor-changes
+ bgp log-neighbor-chaanges
 
  ! iBGP con ER1
  neighbor 20.0.0.252 remote-as 250

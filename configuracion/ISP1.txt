@@ -34,6 +34,15 @@ interface FastEthernet 0/0.6
 router bgp 101
  bgp router-id 50.0.0.100
  network 50.0.0.0 mask 255.255.240.0
+ 
+ network 50.0.0.100 mask 255.255.255.255
+ network 50.0.0.0 mask 255.255.255.252
+ network 50.0.0.8 mask 255.255.255.252
+ network 50.0.0.4 mask 255.255.255.252
+ network 50.0.0.12 mask 255.255.255.252
+ network 50.0.0.16 mask 255.255.255.252
+
+
 
  ! ISP4
  neighbor 50.0.0.9 remote-as 104
