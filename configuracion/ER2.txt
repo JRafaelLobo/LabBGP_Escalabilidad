@@ -1,9 +1,9 @@
-hostname ER1
+hostname ER2
 !
 interface Lo0
  ip address 20.0.0.252 255.255.255.255
 !
-interface FastEthernet 0/0.6
+interface FastEthernet 0/0
  no shutdown
 
 interface FastEthernet 0/0.6
@@ -40,9 +40,11 @@ router bgp 250
 
  ! ISP1
  neighbor 50.0.0.14 remote-as 101
+ !neighbor 50.0.0.14 ebgp-multihop 10
 
  ! ISP2
  neighbor 60.0.0.5 remote-as 102
+ !neighbor 60.0.0.5 ebgp-multihop 10
 
  !IBGP
  bgp log-neighbor-changes

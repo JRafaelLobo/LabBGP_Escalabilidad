@@ -3,6 +3,9 @@ hostname C1
 interface Loopback0
  ip address 20.0.0.241 255.255.255.255
 !
+interface FastEthernet 0/0
+ no shutdown
+!
 interface FastEthernet0/0.10
  encapsulation dot1Q 10
  ip address 10.0.1.2 255.255.255.252

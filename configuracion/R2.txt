@@ -6,6 +6,9 @@ interface Loopback0
 interface Loopback1
  ip address 172.17.0.0 255.255.248.0
 !
+interface FastEthernet 0/0
+ no shutdown
+!
 interface FastEthernet0/0.15
  encapsulation dot1Q 15
  ip address 10.0.2.6 255.255.255.252

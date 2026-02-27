@@ -8,7 +8,7 @@ interface FastEthernet 0/0
 
 interface FastEthernet 0/0.7
  encapsulation Dot1Q 7
- ip address 50.0.0.13 255.255.255.252
+ ip address 50.0.0.14 255.255.255.252
  description ER1 ↔ ISP1
 !
 interface FastEthernet 0/0.8
@@ -31,8 +31,8 @@ router ospf 1
  router-id 20.0.0.251
  passive-interface loopback0
  network 20.0.0.251 0.0.0.0 area 0
- network 10.0.0.0 0.0.0.3 area 0
  network 10.0.1.8 0.0.0.3 area 0
+ network 10.0.1.0 0.0.0.3 area 0
 
 router bgp 250
  bgp router-id 20.0.0.251
@@ -40,9 +40,12 @@ router bgp 250
 
  ! ISP1
  neighbor 50.0.0.14 remote-as 101
+ !neighbor 50.0.0.13 ebgp-multihop 10
 
  ! ISP2
  neighbor 60.0.0.5 remote-as 102
+ !neighbor 60.0.0.5 ebgp-multihop 10
+
 
  !IBGP
  bgp log-neighbor-changes
