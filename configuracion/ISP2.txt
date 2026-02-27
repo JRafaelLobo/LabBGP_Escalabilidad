@@ -2,32 +2,51 @@ hostname ISP2
 !
 interface Lo0
  ip address 60.0.0.100 255.255.255.255
+ ipv6 address 2001:DB8:102:1000::100/128
+ ipv6 enable
+!
+interface Loopback1
+ ipv6 address 2001:DB8:102:A100::1/64
+ ipv6 address 2001:DB8:102:A101::1/64
+ ipv6 address 2001:DB8:102:A102::1/64
+ ipv6 address 2001:DB8:102:A103::1/64
+ ipv6 enable
 !
 interface FastEthernet 0/0
  no shutdown
-
+!
 interface FastEthernet 0/0.4
  encapsulation Dot1Q 4
  ip address 60.0.0.2 255.255.255.252
  description ISP2 ↔ ISP3
+ ipv6 address 2001:DB8:102:C000::2/64
+ ipv6 enable
 !
 interface FastEthernet 0/0.5
  encapsulation Dot1Q 5
  ip address 50.0.0.2 255.255.255.252
  description ISP2 ↔ ISP1
+ ipv6 address 2001:DB8:101:C000::2/64
+ ipv6 enable
 !
 interface FastEthernet 0/0.8
  encapsulation Dot1Q 8
  ip address 60.0.0.5 255.255.255.252
  description ISP2 ↔ ER1
+ ipv6 address 2001:DB8:102:C001::1/64
+ ipv6 enable
 !
 interface FastEthernet 0/0.9
  encapsulation Dot1Q 9
  ip address 60.0.0.9 255.255.255.252
  description ISP2 ↔ ER2
+ ipv6 address 2001:DB8:102:C002::1/64
+ ipv6 enable
 !
 router bgp 102
  bgp router-id 60.0.0.100
+
+ ! ---------------- IPv4 ORIGINAL ----------------
  network 60.0.0.0 mask 255.255.240.0
 
  network 60.0.0.100 mask 255.255.255.255
@@ -35,7 +54,6 @@ router bgp 102
  network 50.0.0.0 mask 255.255.255.252
  network 60.0.0.4 mask 255.255.255.252
  network 60.0.0.8 mask 255.255.255.252
-
 
  ! ISP3
  neighbor 60.0.0.1 remote-as 103
@@ -48,3 +66,37 @@ router bgp 102
 
  ! ER2
  neighbor 60.0.0.10 remote-as 250
+
+ ! =====================================================
+ !                        IPv6 BGP
+ ! =====================================================
+ address-family ipv6
+  !
+  ! Prefijos IPv6 que anuncia ISP2
+  network 2001:DB8:102:1000::100/128
+  network 2001:DB8:102:A100::/64
+  network 2001:DB8:102:A101::/64
+  network 2001:DB8:102:A102::/64
+  network 2001:DB8:102:A103::/64
+
+  ! ---------- ISP3 ----------
+  neighbor 2001:DB8:102:C000::1 remote-as 103
+  neighbor 2001:DB8:102:C000::1 activate
+  neighbor 2001:DB8:102:C000::1 description BGP IPv6 con ISP3
+
+  ! ---------- ISP1 ----------
+  neighbor 2001:DB8:101:C000::1 remote-as 101
+  neighbor 2001:DB8:101:C000::1 activate
+  neighbor 2001:DB8:101:C000::1 description BGP IPv6 con ISP1
+
+  ! ---------- ER1 ----------
+  neighbor 2001:DB8:102:C001::2 remote-as 250
+  neighbor 2001:DB8:102:C001::2 activate
+  neighbor 2001:DB8:102:C001::2 description BGP IPv6 con ER1
+
+  ! ---------- ER2 ----------
+  neighbor 2001:DB8:102:C002::2 remote-as 250
+  neighbor 2001:DB8:102:C002::2 activate
+  neighbor 2001:DB8:102:C002::2 description BGP IPv6 con ER2
+
+ exit-address-family

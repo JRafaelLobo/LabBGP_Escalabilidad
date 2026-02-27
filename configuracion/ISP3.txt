@@ -2,27 +2,44 @@ hostname ISP3
 !
 interface Lo0
  ip address 70.0.0.100 255.255.255.255
+ ipv6 address 2001:DB8:103:1000::100/128
+ ipv6 enable
 !
-
+interface Loopback1
+ ipv6 address 2001:DB8:103:A100::1/64
+ ipv6 address 2001:DB8:103:A101::1/64
+ ipv6 address 2001:DB8:103:A102::1/64
+ ipv6 address 2001:DB8:103:A103::1/64
+ ipv6 enable
+!
 interface FastEthernet 0/0
  no shutdown
+!
 interface FastEthernet 0/0.1
  encapsulation Dot1Q 1
  ip address 70.0.0.2 255.255.255.252
  description ISP3 ↔ ISP4
+ ipv6 address 2001:DB8:103:C000::2/64
+ ipv6 enable
 !
 interface FastEthernet 0/0.3
  encapsulation Dot1Q 3
  ip address 50.0.0.5 255.255.255.252
  description ISP3 ↔ ISP1
+ ipv6 address 2001:DB8:101:C001::1/64
+ ipv6 enable
 !
 interface FastEthernet 0/0.4
  encapsulation Dot1Q 4
  ip address 60.0.0.1 255.255.255.252
  description ISP3 ↔ ISP2
+ ipv6 address 2001:DB8:102:C000::1/64
+ ipv6 enable
 !
 router bgp 103
  bgp router-id 70.0.0.100
+
+ ! ---------------- IPv4 original ----------------
  network 70.0.0.0 mask 255.255.240.0
 
  network 70.0.0.100 mask 255.255.255.255
@@ -38,7 +55,35 @@ router bgp 103
  neighbor 50.0.0.6 remote-as 101
  neighbor 50.0.0.6 description BGP con ISP1
 
-
  ! ISP2
  neighbor 60.0.0.2 remote-as 102
  neighbor 60.0.0.2 description BGP con ISP2
+
+ ! =====================================================
+ !                    IPv6 BGP
+ ! =====================================================
+ address-family ipv6
+  !
+  ! Prefijos a anunciar
+  network 2001:DB8:103:1000::100/128
+  network 2001:DB8:103:A100::/64
+  network 2001:DB8:103:A101::/64
+  network 2001:DB8:103:A102::/64
+  network 2001:DB8:103:A103::/64
+
+  ! ---------- ISP4 ----------
+  neighbor 2001:DB8:103:C000::1 remote-as 104
+  neighbor 2001:DB8:103:C000::1 activate
+  neighbor 2001:DB8:103:C000::1 description BGP IPv6 con ISP4
+
+  ! ---------- ISP1 ----------
+  neighbor 2001:DB8:101:C001::2 remote-as 101
+  neighbor 2001:DB8:101:C001::2 activate
+  neighbor 2001:DB8:101:C001::2 description BGP IPv6 con ISP1
+
+  ! ---------- ISP2 ----------
+  neighbor 2001:DB8:102:C000::2 remote-as 102
+  neighbor 2001:DB8:102:C000::2 activate
+  neighbor 2001:DB8:102:C000::2 description BGP IPv6 con ISP2
+
+ exit-address-family

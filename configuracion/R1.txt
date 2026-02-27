@@ -2,9 +2,16 @@ hostname R1
 !
 interface Loopback0
  ip address 20.0.0.231 255.255.255.255
+ ipv6 address 2001:DB8:250:1000::111/128
+ ipv6 enable
 !
 interface Loopback1
  ip address 172.16.0.0 255.255.248.0
+ ipv6 address 2001:DB8:250:A100::1/64
+ ipv6 address 2001:DB8:250:A101::1/64
+ ipv6 address 2001:DB8:250:A102::1/64
+ ipv6 address 2001:DB8:250:A103::1/64
+ ipv6 enable
 !
 interface FastEthernet 0/0
  no shutdown
@@ -13,12 +20,18 @@ interface FastEthernet0/0.16
  encapsulation dot1Q 16
  ip address 10.0.2.2 255.255.255.252
  description R1 ↔ C1
+ ipv6 address 2001:DB8:200:C006::2/64
+ ipv6 enable
 !
 interface FastEthernet0/0.17
  encapsulation dot1Q 17
  ip address 10.0.2.10 255.255.255.252
  description R1 ↔ C2
+ ipv6 address 2001:DB8:200:C007::2/64
+ ipv6 enable
 !
+!
+! ------------------ OSPFv2 (IPv4) ------------------
 router ospf 1
  router-id 20.0.0.231
  passive-interface Loopback0
@@ -28,6 +41,24 @@ router ospf 1
  network 10.0.2.0 0.0.0.3 area 0
  network 10.0.2.8 0.0.0.3 area 0
 !
+! ------------------ OSPFv3 (IPv6) ------------------
+ipv6 router ospf 10
+ router-id 20.0.0.231
+!
+interface Loopback0
+ ipv6 ospf 10 area 0
+!
+interface Loopback1
+ ipv6 ospf 10 area 0
+!
+interface FastEthernet0/0.16
+ ipv6 ospf 10 area 0
+!
+interface FastEthernet0/0.17
+ ipv6 ospf 10 area 0
+!
+!
+! ------------------ BGP IPv4 ORIGINAL ------------------
 router bgp 250
  bgp router-id 20.0.0.231
  network 20.0.0.0 mask 255.255.240.0
@@ -54,3 +85,20 @@ router bgp 250
  ! iBGP con R2
  neighbor 20.0.0.232 remote-as 250
  neighbor 20.0.0.232 update-source Loopback0
+!
+! ------------------ BGP IPv6 ------------------
+ address-family ipv6
+
+  network 2001:DB8:250:1000::111/128
+  network 2001:DB8:250:A100::/64
+  network 2001:DB8:250:A101::/64
+  network 2001:DB8:250:A102::/64
+  network 2001:DB8:250:A103::/64
+
+  neighbor 20.0.0.252 activate
+  neighbor 20.0.0.251 activate
+  neighbor 20.0.0.241 activate
+  neighbor 20.0.0.242 activate
+  neighbor 20.0.0.232 activate
+
+ exit-address-family

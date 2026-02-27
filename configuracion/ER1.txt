@@ -1,78 +1,123 @@
-    hostname ER1
-    !
-    interface Lo0
-    ip address 20.0.0.251 255.255.255.255
-    !
-    interface FastEthernet 0/0
-    no shutdown
-    interface FastEthernet 0/1
-    no shutdown
-    !
-    interface FastEthernet 0/0.7
-    encapsulation Dot1Q 7
-    ip address 50.0.0.14 255.255.255.252
-    description ER1 ↔ ISP1
-    !
-    interface FastEthernet 0/0.8
-    encapsulation Dot1Q 8
-    ip address 60.0.0.6 255.255.255.252
-    description ER1 ↔ ISP2
-    !
-    interface FastEthernet 0/1.10
-    encapsulation Dot1Q 10
-    ip address 10.0.1.1 255.255.255.252
-    description ER1 ↔ C1
-    !
-    interface FastEthernet 0/1.11
-    encapsulation Dot1Q 11
-    ip address 10.0.1.9 255.255.255.252
-    description ER1 ↔ C2
-    !
+hostname ER1
+!
+interface Lo0
+ ip address 20.0.0.251 255.255.255.255
+ ipv6 address  2001:DB8:250:1000::101/128
+ ipv6 enable
+!
+interface FastEthernet 0/0
+ no shutdown
+!
+interface FastEthernet 0/1
+ no shutdown
+!
+interface FastEthernet 0/0.7
+ encapsulation Dot1Q 7
+ ip address 50.0.0.14 255.255.255.252
+ description ER1 ↔ ISP1
+ ipv6 address 2001:DB8:101:C003::2/64
+ ipv6 enable
+!
+interface FastEthernet 0/0.8
+ encapsulation Dot1Q 8
+ ip address 60.0.0.6 255.255.255.252
+ description ER1 ↔ ISP2
+ ipv6 address 2001:DB8:102:C001::2/64
+ ipv6 enable
+!
+interface FastEthernet 0/1.10
+ encapsulation Dot1Q 10
+ ip address 10.0.1.1 255.255.255.252
+ description ER1 ↔ C1
+ ipv6 address 2001:DB8:200:C000::1/64
+ ipv6 enable
+!
+interface FastEthernet 0/1.11
+ encapsulation Dot1Q 11
+ ip address 10.0.1.9 255.255.255.252
+ description ER1 ↔ C2
+ ipv6 address 2001:DB8:200:C001::1/64
+ ipv6 enable
+!
+! ---------------------- OSPFv2 (IPv4) ----------------------
+router ospf 1
+ router-id 20.0.0.251
+ passive-interface loopback0
+ network 20.0.0.251 0.0.0.0 area 0
+ network 10.0.1.8 0.0.0.3 area 0
+ network 10.0.1.0 0.0.0.3 area 0
+!
+! ---------------------- OSPFv3 (IPv6) -----------------------
+ipv6 router ospf 10
+ router-id 20.0.0.251
+!
+interface Lo0
+ ipv6 ospf 10 area 0
+!
+interface FastEthernet0/1.10
+ ipv6 ospf 10 area 0
+!
+interface FastEthernet0/1.11
+ ipv6 ospf 10 area 0
+!
+! ---------------------- BGP IPv4 ORIGINAL -------------------
+router bgp 250
+ bgp router-id 20.0.0.251
+ network 20.0.0.0 mask 255.255.240.0
 
-    router ospf 1
-    router-id 20.0.0.251
-    passive-interface loopback0
-    network 20.0.0.251 0.0.0.0 area 0
-    network 10.0.1.8 0.0.0.3 area 0
-    network 10.0.1.0 0.0.0.3 area 0
+ ! ISP1
+ neighbor 50.0.0.13 remote-as 101
 
-    router bgp 250
-    bgp router-id 20.0.0.251
-    network 20.0.0.0 mask 255.255.240.0
-    
+ ! ISP2
+ neighbor 60.0.0.5 remote-as 102
 
-    ! ISP1
-    neighbor 50.0.0.13 remote-as 101
-    !neighbor 50.0.0.13 ebgp-multihop 10
+ ! iBGP
+ bgp log-neighbor-changes
 
-    ! ISP2
-    neighbor 60.0.0.5 remote-as 102
-    !neighbor 60.0.0.5 ebgp-multihop 10
+ neighbor 20.0.0.241 next-hop-self
+ neighbor 20.0.0.242 next-hop-self
+ neighbor 20.0.0.231 next-hop-self
+ neighbor 20.0.0.232 next-hop-self
 
+ neighbor 20.0.0.252 remote-as 250
+ neighbor 20.0.0.252 update-source loopback0
 
-    !IBGP
-    bgp log-neighbor-changes
-    
-    neighbor 20.0.0.241 next-hop-self
-    neighbor 20.0.0.242 next-hop-self
-    neighbor 20.0.0.231 next-hop-self
-    neighbor 20.0.0.232 next-hop-self
+ neighbor 20.0.0.241 remote-as 250
+ neighbor 20.0.0.241 update-source loopback0
+ neighbor 20.0.0.241 route-reflector-client
 
-    neighbor 20.0.0.252 remote-as 250
-    neighbor 20.0.0.252 update-source loopback0
+ neighbor 20.0.0.242 remote-as 250
+ neighbor 20.0.0.242 update-source loopback0
+ neighbor 20.0.0.242 route-reflector-client
 
-    neighbor 20.0.0.241 remote-as 250
-    neighbor 20.0.0.241 update-source loopback0
-    neighbor 20.0.0.241 route-reflector-client
+ neighbor 20.0.0.231 remote-as 250
+ neighbor 20.0.0.231 update-source loopback0
+ neighbor 20.0.0.231 route-reflector-client
 
-    neighbor 20.0.0.242 remote-as 250
-    neighbor 20.0.0.242 update-source loopback0
-    neighbor 20.0.0.242 route-reflector-client
+ neighbor 20.0.0.232 remote-as 250
+ neighbor 20.0.0.232 update-source loopback0
+ neighbor 20.0.0.232 route-reflector-client
 
-    neighbor 20.0.0.231 remote-as 250
-    neighbor 20.0.0.231 update-source loopback0
-    neighbor 20.0.0.231 route-reflector-client
+! ---------------------- BGP IPv6 ---------------------------
+ address-family ipv6
 
-    neighbor 20.0.0.232 remote-as 250
-    neighbor 20.0.0.232 update-source loopback0
-    neighbor 20.0.0.232 route-reflector-client
+  network 2001:DB8:250:1000::101/128
+
+  ! ISP1
+  neighbor 2001:DB8:101:C003::1 remote-as 101
+  neighbor 2001:DB8:101:C003::1  activate
+  neighbor 2001:DB8:101:C003::1  description BGP IPv6 con ISP1
+
+  ! ISP2
+  neighbor 2001:DB8:102:C001::1 remote-as 102
+  neighbor 2001:DB8:102:C001::1 activate
+  neighbor 2001:DB8:102:C001::1 description BGP IPv6 con ISP2
+
+  ! iBGP peers
+  neighbor 20.0.0.252 activate
+  neighbor 20.0.0.241 activate
+  neighbor 20.0.0.242 activate
+  neighbor 20.0.0.231 activate
+  neighbor 20.0.0.232 activate
+
+ exit-address-family
